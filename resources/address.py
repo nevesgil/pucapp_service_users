@@ -6,7 +6,7 @@ from models import AddressModel
 from resources.schemas import AddressSchema, AddressUpdateSchema
 import requests
 
-blp = Blueprint("addresses", __name__, description="Operations on addresses")
+blp = Blueprint("Addresses", __name__, description="Operations on addresses")
 
 
 def fetch_address_from_viacep(zip_code):
