@@ -1,2 +1,4 @@
 databases
 *cache*
+.*
+.venv

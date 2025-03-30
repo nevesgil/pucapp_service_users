@@ -9,11 +9,22 @@ class PlainUserSchema(Schema):
 
 class PlainAddressSchema(Schema):
     id = fields.Int(dump_only=True)
-    street = fields.Str(required=False)  # street is not required during creation, filled by ViaCEP
-    city = fields.Str(required=False)  # city is not required during creation, filled by ViaCEP
-    state = fields.Str(required=False)  # state is not required during creation, filled by ViaCEP
+    street = fields.Str(
+        required=False
+    )  # street is not required during creation, filled by ViaCEP
+    district = fields.Str(
+        required=False
+    )  # district is not required during creation, filled by ViaCEP
+    city = fields.Str(
+        required=False
+    )  # city is not required during creation, filled by ViaCEP
+    state = fields.Str(
+        required=False
+    )  # state is not required during creation, filled by ViaCEP
     zip_code = fields.Str(required=True)  # only zip_code is required at creation
-    country = fields.Str(required=False)  # country is not required during creation, filled by ViaCEP
+    country = fields.Str(
+        required=False
+    )  # country is not required during creation, filled by ViaCEP
 
 
 class UserSchema(PlainUserSchema):
@@ -21,7 +32,9 @@ class UserSchema(PlainUserSchema):
 
 
 class AddressSchema(PlainAddressSchema):
-    user_id = fields.Int(load_only=True)  # user_id should be supplied when creating an address
+    user_id = fields.Int(
+        load_only=True
+    )  # user_id should be supplied when creating an address
     user = fields.Nested(PlainUserSchema(), dump_only=True)
 
 
@@ -32,6 +45,7 @@ class UserUpdateSchema(Schema):
 
 class AddressUpdateSchema(Schema):
     street = fields.Str()
+    district = fields.Str()
     city = fields.Str()
     state = fields.Str()
     zip_code = fields.Str()

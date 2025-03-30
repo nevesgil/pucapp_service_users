@@ -20,6 +20,7 @@ def fetch_address_from_viacep(zip_code):
         if "erro" not in data:
             return {
                 "street": data.get("logradouro", ""),
+                "district": data.get("bairro", ""),
                 "city": data.get("localidade", ""),
                 "state": data.get("uf", ""),
                 "zip_code": zip_code,
@@ -48,14 +49,23 @@ class Address(MethodView):
     @blp.response(200, AddressSchema)
     def put(self, address_data, address_id):
         """Update an existing address"""
-        address = AddressModel.query.get(address_id)
+        address = AddressModel.query.get_or_404(address_id)
 
-        if address:
-            for key, value in address_data.items():
+        new_zip_code = address_data.get("zip_code")
+
+        if new_zip_code:
+            fetched_address = fetch_address_from_viacep(new_zip_code)
+            if not fetched_address:
+                abort(400, message="Invalid zip code or ViaCEP service error")
+
+            # Merge fetched address details with the provided data
+            for key, value in fetched_address.items():
                 setattr(address, key, value)
-        else:
-            address = AddressModel(id=address_id, **address_data)
-            db.session.add(address)
+
+        # Update other user-provided fields (except zip_code, which was already handled)
+        for key, value in address_data.items():
+            if key != "zip_code":  # Avoid overwriting zip_code again
+                setattr(address, key, value)
 
         db.session.commit()
         return address
@@ -94,3 +104,16 @@ class AddressList(MethodView):
             abort(500, message="Error inserting the address")
 
         return address, 201
+
+
+@blp.route("/address/lookup/<string:zip_code>")
+class AddressLookup(MethodView):
+    @blp.response(200, AddressSchema)
+    def get(self, zip_code):
+        """Retrieve address details from ViaCEP API based on zip code"""
+        fetched_address = fetch_address_from_viacep(zip_code)
+
+        if not fetched_address:
+            abort(400, message="Invalid zip code or ViaCEP service error")
+
+        return fetched_address
