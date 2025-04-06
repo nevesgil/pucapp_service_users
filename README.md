@@ -14,6 +14,7 @@ Gilmar Neves
 - [Introduction](#introduction)
 - [Tech and Tools](#tech-and-tools)
 - [Architecture](#architecture)
+     - [Database Model](#database-model)
 - [Use](#use)
     - [Endpoints](#endpoints)
 
@@ -69,6 +70,12 @@ GET /address/lookup/{zip_code}
 GET /address
 POST /address
 ```
+
+#### Database Model
+
+In the database users_db, one may find the normalized model:
+
+![users_model](./doc/img/users_model.png)
 
 ### Use
 
