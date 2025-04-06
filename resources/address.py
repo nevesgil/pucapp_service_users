@@ -58,13 +58,11 @@ class Address(MethodView):
             if not fetched_address:
                 abort(400, message="Invalid zip code or ViaCEP service error")
 
-            # Merge fetched address details with the provided data
             for key, value in fetched_address.items():
                 setattr(address, key, value)
 
-        # Update other user-provided fields (except zip_code, which was already handled)
         for key, value in address_data.items():
-            if key != "zip_code":  # Avoid overwriting zip_code again
+            if key != "zip_code":
                 setattr(address, key, value)
 
         db.session.commit()
@@ -92,7 +90,6 @@ class AddressList(MethodView):
         if not fetched_address:
             abort(400, message="Invalid zip code or ViaCEP service error")
 
-        # Merge fetched data with the provided data
         final_address_data = {**fetched_address, **address_data}
 
         address = AddressModel(**final_address_data)
