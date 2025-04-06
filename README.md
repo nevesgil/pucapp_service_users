@@ -65,7 +65,7 @@ POST /user
 
 GET /address/{address_id}
 PUT /address/{address_id}
-DELTE /address/{address_id}
+DELETE /address/{address_id}
 GET /address/lookup/{zip_code}
 GET /address
 POST /address
