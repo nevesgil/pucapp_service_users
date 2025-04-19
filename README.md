@@ -138,7 +138,7 @@ When not using the service anymore, run:
 docker compose down
 ```
 
-iii) Access the service on https://localhost:5001
+iv) Access the service on https://localhost:5001
 
 
 #### Endpoints
